@@ -41,6 +41,7 @@ Resources:
       Environment:
         Variables:
           NODE_ENV: DEV
+          HELLO: WORLD
       FunctionName: StarterLambda
       Handler: index.handler
       MemorySize: 128
