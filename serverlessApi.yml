@@ -1,11 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Starter template for API Gateway and Lambda function integration
 
-Parameter:
-  S3BucketName:
-    Type: String
-    Default: thomasstep-codepipelinebucket
-
 Resources:
 #-------------------------------------------------------------------------------
 # LAMBDA RESOURCES
