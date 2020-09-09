@@ -25,12 +25,16 @@ Resources:
               Principal:
                   Service:
                     - codepipeline.amazonaws.com
+                    - cloudformation.amazonaws.com
               Action:
                 - sts:AssumeRole
       Description: IAM Role for MyCodePipeline
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
         - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/IAMFullAccess
       RoleName: MyCodePipelineRole
 
   MyCodePipeline:
