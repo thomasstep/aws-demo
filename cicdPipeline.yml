@@ -5,15 +5,30 @@ Parameters:
   GithubOauthToken:
     Type: AWS::SSM::Parameter::Value<String>
     Default: githubOauthToken
-  S3BucketName:
+  CodePipelineS3BucketName:
     Type: String
     Default: thomasstep-codepipelinebucket
+  ServerlessApiSourceS3BucketName:
+    Type: String
+    Default: thomasstep-serverlessapibucket
 
 Resources:
   CodePipelineArtifactBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref S3BucketName
+      BucketName: !Ref CodePipelineS3BucketName
+
+  ServerlessApiSourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref ServerlessApiSourceS3BucketName
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-old-deployment-packages
+            Status: Enabled
+            NoncurrentVersionExpirationInDays: 30
+      VersioningConfiguration:
+        Status: Enabled
 
   CodePipelineRole:
     Type: AWS::IAM::Role
@@ -42,7 +57,7 @@ Resources:
     Properties:
       Name: MyCicdPipeline
       ArtifactStore:
-        Location: !Ref S3BucketName
+        Location: !Ref CodePipelineS3BucketName
         Type: S3
       RoleArn: !GetAtt CodePipelineRole.Arn
       Stages:
@@ -66,6 +81,24 @@ Resources:
                 OAuthToken: !Ref GithubOauthToken
               Name: ApplicationSource
         -
+          Name: Build
+          Actions:
+            - Name: BuildServerlessApiResources
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              RunOrder: 1
+              Configuration:
+                ProjectName: !Ref ServerlessApiCodeBuild
+                PrimarySource: SourceArtifact
+                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"}"}]'
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+        -
           Name: Deploy
           Actions:
             - Name: DeployServerlessApi
@@ -80,6 +113,22 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt CodePipelineRole.Arn
                 StackName: myserverlessapi
-                TemplatePath: 'SourceArtifact::serverlessApi.yml'
+                TemplatePath: BuildArtifact::serverlessApi.yml
               InputArtifacts:
-                - Name: SourceArtifact
+                - Name: BuildArtifact
+
+  ServerlessApiCodeBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: serverless-api-codebuild
+      Description: CodeBuild for serverless API
+      ServiceRole: !GetAtt CodePipelineRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:4.0
+      Source:
+        Type: CODEPIPELINE
+      TimeoutInMinutes: 10

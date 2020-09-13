@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      #- npm test
+  build:
+    commands:
+      - zip deployment-package.zip index.js
+      - aws s3 cp deployment-package.zip "s3://${S3_BUCKET_NAME}/deployment-package.zip"
+  post_build:
+    commands:
+      - aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key deployment-package.zip
+      - aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key deployment-package.zip | jq '.VersionId'
+      - S3_VERSION=$(aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key deployment-package.zip | jq '.VersionId')
+      - echo "{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Version\":\"${S3_VERSION}\"}" >> templateConfiguration.json
+
+artifacts:
+  files:
+    - serverlessApi.yml
+    - templateConfiguration.json

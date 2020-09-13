@@ -1,6 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Starter template for API Gateway and Lambda function integration
 
+S3Bucket:
+  Type: String
+  Description: S3 Bucket for deployment package
+  Default: thomasstep-serverlessapibucket
+S3Key:
+  Type: String
+  Description: S3 key of deployment package
+  Default: deployment-package.zip
+S3Version:
+  Type: String
+  Description: Version ID of deployment package from S3 Bucket
+
 Resources:
 #-------------------------------------------------------------------------------
 # LAMBDA RESOURCES
@@ -26,6 +38,9 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Code:
+        # S3Bucket:
+        # S3Key:
+        # S3Version:
         ZipFile: |
           module.exports.handler = (event, context, callback) => {
             console.log('Hello World!');
