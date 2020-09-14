@@ -39,7 +39,7 @@ Resources:
       Code:
         S3Bucket: !Ref S3Bucket
         S3Key: !Ref S3Key
-        S3Version: !Ref S3Version
+        S3ObjectVersion: !Ref S3Version
         # ZipFile: |
         #   module.exports.handler = (event, context, callback) => {
         #     console.log('Hello World!');
