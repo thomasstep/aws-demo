@@ -7,6 +7,8 @@ phases:
   pre_build:
     commands:
       #- npm test
+      - echo "${S3_BUCKET_NAME}"
+      - echo "${S3_KEY_NAME}"
   build:
     commands:
       - zip "${S3_KEY_NAME}" index.js

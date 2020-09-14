@@ -98,7 +98,7 @@ Resources:
               Configuration:
                 ProjectName: !Ref ServerlessApiCodeBuild
                 PrimarySource: SourceArtifact
-                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"},{"name":"S3_KEY_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"}]'
+                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"},{"name":"S3_KEY_NAME","value":"${DeploymentPackageName}","type":"PLAINTEXT"}]'
               InputArtifacts:
                 - Name: SourceArtifact
               OutputArtifacts:
