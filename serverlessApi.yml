@@ -40,17 +40,6 @@ Resources:
         S3Bucket: !Ref S3Bucket
         S3Key: !Ref S3Key
         S3ObjectVersion: !Ref S3Version
-        # ZipFile: |
-        #   module.exports.handler = (event, context, callback) => {
-        #     console.log('Hello World!');
-        #     const data = {
-        #       statusCode: 200,
-        #       body: JSON.stringify({
-        #         hello: 'world',
-        #       }),
-        #     };
-        #     callback(null, data);
-        #   }
       Description: Starter Lambda Function
       Environment:
         Variables:
