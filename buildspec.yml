@@ -15,7 +15,7 @@ phases:
     commands:
       - S3_VERSION=$(aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key deployment-package.zip getobjectoutfile | jq '.VersionId')
       - echo "${S3_VERSION}"
-      - echo "{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Version\":\"${S3_VERSION}\"}" >> templateConfiguration.json
+      - echo "{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Version\":${S3_VERSION}}" >> templateConfiguration.json
       - cat templateConfiguration.json
 
 artifacts:
