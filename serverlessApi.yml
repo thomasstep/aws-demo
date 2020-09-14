@@ -8,7 +8,6 @@ S3Bucket:
 S3Key:
   Type: String
   Description: S3 key of deployment package
-  Default: deployment-package.zip
 S3Version:
   Type: String
   Description: Version ID of deployment package from S3 Bucket

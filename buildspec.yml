@@ -9,12 +9,12 @@ phases:
       #- npm test
   build:
     commands:
-      - zip deployment-package.zip index.js
-      - aws s3 cp deployment-package.zip "s3://${S3_BUCKET_NAME}/deployment-package.zip"
+      - zip "${S3_KEY_NAME}" index.js
+      - aws s3 cp "${S3_KEY_NAME}" "s3://${S3_BUCKET_NAME}/"${S3_KEY_NAME}""
   post_build:
     commands:
-      - S3_VERSION=$(aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key deployment-package.zip getobjectoutfile | jq '.VersionId')
-      - echo "{\"Parameters\":{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Version\":${S3_VERSION}}}" >> templateConfiguration.json
+      - S3_VERSION=$(aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key "${S3_KEY_NAME}" getobjectoutfile | jq '.VersionId')
+      - echo "{\"Parameters\":{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Key\":\"${S3_KEY_NAME}\",\"S3Version\":${S3_VERSION}}}" >> templateConfiguration.json
       - cat templateConfiguration.json
 
 artifacts:

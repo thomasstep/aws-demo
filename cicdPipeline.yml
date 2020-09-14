@@ -11,6 +11,9 @@ Parameters:
   ServerlessApiSourceS3BucketName:
     Type: String
     Default: thomasstep-serverlessapibucket
+  DeploymentPackageName:
+    Type: String
+    Default: deployment-package.zip
 
 Resources:
   CodePipelineArtifactBucket:
@@ -95,7 +98,7 @@ Resources:
               Configuration:
                 ProjectName: !Ref ServerlessApiCodeBuild
                 PrimarySource: SourceArtifact
-                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"}]'
+                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"},{"name":"S3_KEY_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"}]'
               InputArtifacts:
                 - Name: SourceArtifact
               OutputArtifacts:
