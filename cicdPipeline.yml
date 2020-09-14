@@ -41,6 +41,7 @@ Resources:
                   Service:
                     - codepipeline.amazonaws.com
                     - cloudformation.amazonaws.com
+                    - codebuild.amazonaws.com
               Action:
                 - sts:AssumeRole
       Description: IAM Role for MyCodePipeline
@@ -50,6 +51,7 @@ Resources:
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
         - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
         - arn:aws:iam::aws:policy/IAMFullAccess
+        - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
       RoleName: MyCodePipelineRole
 
   MyCodePipeline:
@@ -93,7 +95,7 @@ Resources:
               Configuration:
                 ProjectName: !Ref ServerlessApiCodeBuild
                 PrimarySource: SourceArtifact
-                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"}"}]'
+                EnvironmentVariables: !Sub '[{"name":"S3_BUCKET_NAME","value":"${ServerlessApiSourceS3BucketName}","type":"PLAINTEXT"}]'
               InputArtifacts:
                 - Name: SourceArtifact
               OutputArtifacts:
@@ -114,6 +116,7 @@ Resources:
                 RoleArn: !GetAtt CodePipelineRole.Arn
                 StackName: myserverlessapi
                 TemplatePath: BuildArtifact::serverlessApi.yml
+                TemplateConfiguration: BuildArtifact::templateConfiguration.json
               InputArtifacts:
                 - Name: BuildArtifact
 
