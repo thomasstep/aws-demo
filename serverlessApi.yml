@@ -4,7 +4,6 @@ Description: Starter template for API Gateway and Lambda function integration
 S3Bucket:
   Type: String
   Description: S3 Bucket for deployment package
-  Default: thomasstep-serverlessapibucket
 S3Key:
   Type: String
   Description: S3 key of deployment package
