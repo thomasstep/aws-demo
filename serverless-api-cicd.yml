@@ -4,7 +4,8 @@ Description: CI/CD pipeline for serverless API
 Parameters:
   GithubOauthToken:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: githubOauthToken
+    Default: github-oauth-token
+    NoEcho: true
   CodePipelineS3BucketName:
     Type: String
     Default: thomasstep-codepipelinebucket
@@ -80,7 +81,7 @@ Resources:
               RunOrder: 1
               Configuration:
                 Owner: thomasstep
-                Repo: awsCicdDemo
+                Repo: aws-demo
                 PollForSourceChanges: 'true'
                 Branch: master
                 OAuthToken: !Ref GithubOauthToken
@@ -118,7 +119,7 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt CodePipelineRole.Arn
                 StackName: myserverlessapi
-                TemplatePath: BuildArtifact::serverlessApi.yml
+                TemplatePath: BuildArtifact::serverless-api.yml
                 TemplateConfiguration: BuildArtifact::templateConfiguration.json
               InputArtifacts:
                 - Name: BuildArtifact

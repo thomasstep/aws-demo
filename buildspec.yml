@@ -16,10 +16,10 @@ phases:
   post_build:
     commands:
       - S3_VERSION=$(aws s3api get-object --bucket "${S3_BUCKET_NAME}" --key "${S3_KEY_NAME}" getobjectoutfile | jq '.VersionId')
-      - echo "{\"Parameters\":{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Key\":\"${S3_KEY_NAME}\",\"S3Version\":${S3_VERSION}}}" >> templateConfiguration.json
-      - cat templateConfiguration.json
+      - echo "{\"Parameters\":{\"S3Bucket\":\"${S3_BUCKET_NAME}\",\"S3Key\":\"${S3_KEY_NAME}\",\"S3Version\":${S3_VERSION}}}" >> template-configuration.json
+      - cat template-configuration.json
 
 artifacts:
   files:
-    - serverlessApi.yml
-    - templateConfiguration.json
+    - serverless-api.yml
+    - template-configuration.json
