@@ -31,6 +31,7 @@ Resources:
       Description: Starter Lambda Function IAM Role
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
       RoleName: StarterLambdaFunctionRole
 
   LambdaFunction:
@@ -44,7 +45,7 @@ Resources:
       Environment:
         Variables:
           NODE_ENV: DEV
-      FunctionName: StarterLambda
+      FunctionName: starter-lamba
       Handler: index.handler
       MemorySize: 128
       Role: !GetAtt
@@ -52,6 +53,8 @@ Resources:
         - Arn
       Runtime: nodejs12.x
       Timeout: 30
+      TracingConfig:
+        Mode: Active
 
   LambdaFunctionPermission:
     Type: AWS::Lambda::Permission
@@ -167,10 +170,12 @@ Resources:
       Description: Original starter template stage
       MethodSettings:
         -
-          HttpMethod: POST
+          HttpMethod: "POST"
+          DataTraceEnabled: true
           LoggingLevel: INFO
           MetricsEnabled: true
-          ResourcePath: /~1hello
+          ResourcePath: "/~1hello"
       RestApiId: !Ref ApiGatewayRest
       StageName: starter
+      TracingEnabled: true
     DependsOn: ApiGatewayLogging

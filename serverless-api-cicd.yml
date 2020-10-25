@@ -118,9 +118,9 @@ Resources:
                 ActionMode: CREATE_UPDATE
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt CodePipelineRole.Arn
-                StackName: myserverlessapi
+                StackName: my-serverless-api
                 TemplatePath: BuildArtifact::serverless-api.yml
-                TemplateConfiguration: BuildArtifact::templateConfiguration.json
+                TemplateConfiguration: BuildArtifact::template-configuration.json
               InputArtifacts:
                 - Name: BuildArtifact
 
